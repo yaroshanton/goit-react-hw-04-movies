@@ -13,7 +13,7 @@ export default class componentName extends Component {
           <li><Link to="/movies">Movies</Link></li>
         </ul>
         <Route exact path="/" component={HomePage} />
-        <Route path="/movies" component={MoviesPage} />
+        <Route exact path="/movies" component={MoviesPage} />
         <Route path="/movies/:movieId" component={MovieDetailsPage} />
       </>
     )

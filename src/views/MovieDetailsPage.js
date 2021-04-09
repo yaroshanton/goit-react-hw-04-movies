@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Link, Route } from 'react-router-dom'
 import Cast from '../components/Cast'
 import Reviews from '../components/Reviews'
+import routes from '../routes'
 
 export default class MovieDetailsPage extends Component {
     state = {
@@ -21,6 +22,15 @@ export default class MovieDetailsPage extends Component {
         this.setState({ ...movie.data })
     }
 
+    handleGoBack = () => {
+        const { history, location } = this.props
+
+        if (location.state && location.state.from) {
+            return history.push(location.state.from)
+        }
+
+        history.push(routes.home)
+    }
 
 
     render() {
@@ -28,6 +38,7 @@ export default class MovieDetailsPage extends Component {
         const { url, path } = this.props.match
         return (
             <>
+                <button type="button" onClick={this.handleGoBack}>Go back</button>
                 <div>
                     <img src={`https://image.tmdb.org/t/p/w500${poster_path}`} width="320" alt={original_title} />
                     <div>

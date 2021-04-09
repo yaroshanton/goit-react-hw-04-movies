@@ -1,13 +1,22 @@
 import axios from 'axios'
 import { React, Component } from 'react'
-import MoviesList from '../components/MoviesList'
+import MoviesList from '../components/MoviesList/MoviesList'
 
 export default class MoviesPage extends Component {
     state = {
-        inputValue:'',
-        movies:[]
+        inputValue: '',
+        movies: []
     }
-    
+
+    componentDidMount() {
+        const { search } = this.props.location
+
+        if (search) {
+            axios.get(`https://api.themoviedb.org/3/search/movie${search}&api_key=a4de692f1b0678dfae28764090f39212&language=en-US&page=1`).then(response => this.setState({ movies: response.data.results }))
+        }
+    }
+
+
     handleChange = e => {
         this.setState({
             inputValue: e.target.value,
@@ -16,8 +25,14 @@ export default class MoviesPage extends Component {
 
     handleSubmit = e => {
         e.preventDefault()
-        
-        axios.get(`https://api.themoviedb.org/3/search/movie?api_key=a4de692f1b0678dfae28764090f39212&language=en-US&query=${this.state.inputValue}&page=1`).then(response => this.setState({movies : response.data.results, inputValue: ''}))
+
+        axios.get(`https://api.themoviedb.org/3/search/movie?query=${this.state.inputValue}&api_key=a4de692f1b0678dfae28764090f39212&language=en-US&page=1`).then(response => this.setState({ movies: response.data.results, inputValue: '' }))
+
+        this.props.history.push({
+            ...this.props.location,
+            search: `query=${this.state.inputValue}`
+        })
+
     }
 
 
@@ -35,7 +50,7 @@ export default class MoviesPage extends Component {
                         onChange={this.handleChange}
                     />
                 </form>
-                {this.state.movies.length > 0 && <MoviesList movies={this.state.movies}/>}
+                <MoviesList movies={this.state.movies} />
             </>
         )
     }

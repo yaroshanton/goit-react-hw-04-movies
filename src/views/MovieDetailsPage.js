@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { Link, Route } from 'react-router-dom'
 import Cast from '../components/Cast'
+import Reviews from '../components/Reviews'
 
 export default class MovieDetailsPage extends Component {
     state = {
@@ -50,7 +51,8 @@ export default class MovieDetailsPage extends Component {
                     </ul>
                 </div>
 
-                <Route exact path={`${path}/cast`} component={Cast}></Route>
+                <Route path={`${path}/cast`} component={Cast}></Route>
+                <Route path={`${path}/reviews`}>{Reviews}</Route>
             </>
         )
     }

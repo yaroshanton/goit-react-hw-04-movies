@@ -52,7 +52,7 @@ export default class MovieDetailsPage extends Component {
                 </div>
 
                 <Route path={`${path}/cast`} component={Cast}></Route>
-                <Route path={`${path}/reviews`}>{Reviews}</Route>
+                <Route path={`${path}/reviews`} component={Reviews}></Route>
             </>
         )
     }

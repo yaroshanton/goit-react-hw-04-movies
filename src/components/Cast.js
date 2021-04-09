@@ -15,9 +15,10 @@ export default class Cast extends Component {
     
 
     render() {
+        const {cast} = this.state
         return (
             <>
-                {this.state.cast.map(res => 
+                {cast.map(res => 
                         <li key={res.cast_id}>
                             <img src={`https://image.tmdb.org/t/p/w500${res.profile_path}`} alt={res.name} width={120}/>
                             <p>{res.name}</p>

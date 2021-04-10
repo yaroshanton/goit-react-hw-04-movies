@@ -1,16 +1,14 @@
 import { React, Component } from 'react'
-import axios from 'axios'
+import { fetchMoviesReviews } from '../services/MoviesApi'
 
 class Reviews extends Component {
     state = {
         results: []
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         const { movieId } = this.props.match.params
-        const res = await axios.get(`http://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=a4de692f1b0678dfae28764090f39212`)
-
-        this.setState({ results: res.data.results })
+        fetchMoviesReviews(movieId).then(res => this.setState({ results: res.data.results }))
     }
 
 

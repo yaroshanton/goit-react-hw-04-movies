@@ -1,9 +1,18 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component, Suspense, lazy } from 'react'
+import { fetchMoviesDetails } from '../services/MoviesApi'
 import { Link, Route } from 'react-router-dom'
-import Cast from '../components/Cast'
-import Reviews from '../components/Reviews'
+// import Cast from '../components/Cast'
+// import Reviews from '../components/Reviews'
 import routes from '../routes'
+import '../styles/MovieDetailsPage.scss'
+
+const Cast = lazy(() =>
+    import('../components/Cast.js' /* webpackChunkName: "Cast" */),
+);
+
+const Reviews = lazy(() =>
+    import('../components/Reviews.js' /* webpackChunkName: "Reviews" */),
+);
 
 export default class MovieDetailsPage extends Component {
     state = {
@@ -15,11 +24,9 @@ export default class MovieDetailsPage extends Component {
 
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         const { movieId } = this.props.match.params
-        const movie = await axios.get(`http://api.themoviedb.org/3/movie/${movieId}?api_key=a4de692f1b0678dfae28764090f39212`)
-
-        this.setState({ ...movie.data })
+        fetchMoviesDetails(movieId).then(res => this.setState({ ...res.data }))
     }
 
     handleGoBack = () => {
@@ -39,9 +46,9 @@ export default class MovieDetailsPage extends Component {
         return (
             <>
                 <button type="button" onClick={this.handleGoBack}>Go back</button>
-                <div>
+                <div className='Details'>
                     <img src={`https://image.tmdb.org/t/p/w500${poster_path}`} width="320" alt={original_title} />
-                    <div>
+                    <div className='DetailsInfo'>
                         <h1>{original_title}</h1>
                         <p>User Score: {Math.round(popularity)}</p>
                         <p>Overview</p>
@@ -49,7 +56,7 @@ export default class MovieDetailsPage extends Component {
                         <p>Genres</p>
                         <ul>
                             {genres.map(genre =>
-                                <li key={genre.id}>{genre.name}</li>
+                                <li className='GenreLink' key={genre.id}>{genre.name}</li>
                             )}
                         </ul>
                     </div>
@@ -57,13 +64,14 @@ export default class MovieDetailsPage extends Component {
                 <div>
                     <p>Additional Information</p>
                     <ul>
-                        <li><Link to={`${url}/cast`}>Cast</Link></li>
-                        <li><Link to={`${url}/reviews`}>Reviews</Link></li>
+                        <li className='BottomLink'><Link className='BottomLinkAnchor' to={`${url}/cast`}>Cast</Link></li>
+                        <li className='BottomLink'><Link className='BottomLinkAnchor' to={`${url}/reviews`}>Reviews</Link></li>
                     </ul>
                 </div>
-
-                <Route path={`${path}/cast`} component={Cast}></Route>
-                <Route path={`${path}/reviews`} component={Reviews}></Route>
+                <Suspense fallback={<h1>Загружаем...</h1>}>
+                    <Route path={`${path}/cast`} component={Cast}></Route>
+                    <Route path={`${path}/reviews`} component={Reviews}></Route>
+                </Suspense>
             </>
         )
     }

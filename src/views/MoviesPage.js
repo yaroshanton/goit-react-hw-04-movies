@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { React, Component } from 'react'
+import { fetchCurrentMovies, fetchMoviesByQuery } from '../services/MoviesApi'
 import MoviesList from '../components/MoviesList/MoviesList'
 
 export default class MoviesPage extends Component {
@@ -10,10 +10,7 @@ export default class MoviesPage extends Component {
 
     componentDidMount() {
         const { search } = this.props.location
-
-        if (search) {
-            axios.get(`https://api.themoviedb.org/3/search/movie${search}&api_key=a4de692f1b0678dfae28764090f39212&language=en-US&page=1`).then(response => this.setState({ movies: response.data.results }))
-        }
+        if (search) { fetchCurrentMovies(search).then(res => this.setState({ movies: res.data.results })) }
     }
 
 
@@ -25,12 +22,13 @@ export default class MoviesPage extends Component {
 
     handleSubmit = e => {
         e.preventDefault()
+        const { inputValue } = this.state
 
-        axios.get(`https://api.themoviedb.org/3/search/movie?query=${this.state.inputValue}&api_key=a4de692f1b0678dfae28764090f39212&language=en-US&page=1`).then(response => this.setState({ movies: response.data.results, inputValue: '' }))
+        fetchMoviesByQuery(inputValue).then(res => this.setState({ movies: res.data.results, inputValue: '' }))
 
         this.props.history.push({
             ...this.props.location,
-            search: `query=${this.state.inputValue}`
+            search: `query=${inputValue}`
         })
 
     }

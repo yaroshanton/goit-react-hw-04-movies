@@ -1,5 +1,5 @@
 [build]
-    publich = "build"
+    publish = "build"
 
 [[redirect]]
     from = "/*"

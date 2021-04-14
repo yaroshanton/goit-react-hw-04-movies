@@ -12,7 +12,6 @@ export default class Cast extends Component {
         fetchMoviesCast(movieId).then(res => this.setState({ cast: res.data.cast }))
     }
 
-
     render() {
         const { cast } = this.state
         return (

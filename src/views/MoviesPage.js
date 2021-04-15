@@ -35,6 +35,7 @@ export default class MoviesPage extends Component {
 
 
     render() {
+        const { inputValue, movies } = this.state
         return (
             <>
                 <form className="SearchForm" onSubmit={this.handleSubmit}>
@@ -44,11 +45,11 @@ export default class MoviesPage extends Component {
                         autoComplete="off"
                         autoFocus
                         placeholder="Search images and photos"
-                        value={this.state.inputValue}
+                        value={inputValue}
                         onChange={this.handleChange}
                     />
                 </form>
-                <MoviesList movies={this.state.movies} />
+                {movies && <MoviesList movies={movies} />}
             </>
         )
     }

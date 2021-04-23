@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react'
 import { Route, Switch } from 'react-router-dom'
-import AppBar from './components/AppBar/AppBar's
+import AppBar from './components/AppBar/AppBar'
 import routes from './routes'
 
 const HomePage = lazy(() =>
